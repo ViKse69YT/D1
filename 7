@@ -1,0 +1,21 @@
+ISP
+
+iptables -t nat -A POSTROUTING -o ens19 -J MASQUERADE
+iptables-save >> /etc/sysconfig/iptables
+systemctl enable --now iptables.service
+systemctl status iptables.service
+
+BR-RTR
+
+en
+ping 8.8.8.8
+conf t
+interface isp=br 
+ip nat outside
+ex
+interface br-net
+ip nat inside
+ex
+ip nat pool nat 192.168.4.1-192.168.4.30 [придумываем сами]
+ip nat source dynamic inside-to-outside pool nat overload interface isp-br
+end
