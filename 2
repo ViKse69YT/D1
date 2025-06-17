@@ -1,0 +1,80 @@
+BR-RTR
+
+show port
+conf t
+ip domain-name au-team,irpo
+ip name-server [ip hq srv]
+hostname br-rtr.au-team.irpo
+end
+write
+conf t
+ip route 0.0.0.0/0 172.16.5.1 description default [br-rtr > isp]
+interface isp-br
+ip address 172.16.5.2/28 [isp > br]
+exit
+interface br-net
+ip address 192.168.4.1/27 [придумываем сами]
+ex
+port ge
+port ge0
+service-instance ge0/isp-br
+encapsulation untagged
+connect ip interface isp-br
+ex
+ex
+port ge1
+service-instance ge1/br-net
+encapsulation untagged
+connect ip interface br-net
+end
+
+HQ-RTR
+
+show port
+conf t
+ip domain-name au-team,irpo
+ip name-server 192.168.1.10 [придумываем сами]
+hostname hq-rtr.au-team.irpo
+end
+write
+conf t
+ip route 0.0.0.0/0 172.16.4.1 description default [маршрут по умолчанию]
+interface isp-hq
+ip address 172.16.4.2/28 [isp > hq]
+ex
+port ge0
+service-instance ge0/isp-hq
+encapsulation untagged
+connect ip interface isp-hq
+end
+write
+conf t
+interface srv-net
+ip address 192.168.1.1/26 [придумываем сами, кроме портов]
+ex
+interface cli-net
+ip address 192.168.2.1/28 [придумываем сами, кроме портов]
+ex
+interface management
+ip address 192.168.3.1/29 [придумываем сами, кроме портов]
+ex
+port
+port ge1
+service-instance ge1/srv-net
+encapsulation dot1q 100 exact
+rewrite pop1
+connect ip interface srv-net
+ex
+port ge1
+service-instance ge1/cli-net 
+encapsulation dot1q 200 exact
+rewrite pop1
+connect ip interface cli-net
+ex
+ex
+port ge1
+service-instance ge1/managment
+encapsulation dot1q 999 exact
+rewrite pop1
+connect ip interface management
+end
