@@ -1,0 +1,33 @@
+ISP
+
+vim /etc/net/sysctl.conf
+(настройка forwarding)
+
+systemctl restart network
+hostnamectl set-hostname ISP
+ip a (смотрим куда enc на что смотрит)
+mkdir /etc/net/ifaces/ens20
+mkdir /etc/net/ifaces/ens21
+cp /etc/net/ifaces/ens19/options /etc/net/ifaces/ens20/options
+vim /etc/net/ifaces/ens20/options
+[NM_CONTRIOLLED=no]
+[DISABLED=no]
+[CINFIG_IPV4=yes]
+cp /etc/net/ifaces/ens20/options /etc/net/ifaces/ens21/options
+vim /etc/net/ifaces/ens20/ipv4address
+[пишем адрес]
+vim /etc/net/ifaces/ens21/ipv4address
+[пишем адрес]
+systemctl restart network
+
+HQ-SRV
+hostnamectl set-hostname hq-srv.au-team.irpo
+vim /etc/sysconfig/network
+[меняем доменное имя]
+systemctl enable --now NetworkManager
+
+BR-SRV
+hostnamectl set-hostname br-srv.au-team.irpo
+vim /etc/sysconfig/network
+[меняем доменное имя]
+systemctl enable --now NetworkManager
