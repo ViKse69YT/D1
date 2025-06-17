@@ -1,0 +1,27 @@
+HQ-SRV
+
+control sudo
+useradd sshuser -u 1010 -G whell
+password sshuser
+vim /etc/sudoers
+[wheel_users]
+
+HQ-RTR
+
+en
+conf t
+username net_admin
+password 
+role admin
+ex
+
+HQ-SRV
+
+vim /etc/openssh/sshd_config
+[Port 2024]
+[AllowUsers sshuser]
+[MaxAuthTries 2]
+[Banner /etc/openssh/banner]
+vim /etc/openssh/banner
+systemctl restart sshd.service
+
