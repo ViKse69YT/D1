@@ -1,0 +1,39 @@
+HQ-RTR
+
+en
+conf t
+interface tunnel.0
+ip address 192.168.6.1/30 [придумываем сами, кроме портов]
+ip mtu 1400
+ip tunnel [ip hq-rtr] [next interface] mode gre
+ip ospf authentication-key P@ssw0rd
+ex
+router ospf 1
+network 192.168.6.0/30 area 0.0.0.0
+network 192.168.1.0/26 area 0.0.0.0 [srv]
+network 192.168.2.0/28 area 0.0.0.0 [cli]
+network 192.168.3.0/29 area 0.0.0.0 [management]
+passive-interface default
+no passive-interface tunnel.0
+exit
+end
+write
+
+BR-RTR
+
+en
+conf t
+interface tunnel.0
+ip address 192.168.6.2/30 [придумываем сами, кроме портов]
+ip mtu 1400
+ip tunnel [ip br-rtr] [back interface] mode gre
+ip ospf authentication-key P@ssw0rd
+ex
+route ospf 1
+network 192.168.6.0/30 area 0.0.0.0 [придумываем сами]
+network 192.168.4.0/27 area 0.0.0.0 [придумываем сами]
+passive-interface default
+no passive-interface tunnel.0
+exit
+end
+write
