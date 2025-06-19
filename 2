@@ -8,9 +8,9 @@ hostname br-rtr.au-team.irpo
 end
 write
 conf t
-ip route 0.0.0.0/0 172.16.5.1 description default [br-rtr > isp]
+ip route 0.0.0.0/0 [br-rtr > isp] description default 
 interface isp-br
-ip address 172.16.5.2/28 [isp > br]
+ip address [isp > br]
 exit
 interface br-net
 ip address 192.168.4.1/27 [придумываем сами]
@@ -38,9 +38,9 @@ hostname hq-rtr.au-team.irpo
 end
 write
 conf t
-ip route 0.0.0.0/0 172.16.4.1 description default [маршрут по умолчанию]
+ip route 0.0.0.0/0 [hq-rtr > isp] description default [маршрут по умолчанию]
 interface isp-hq
-ip address 172.16.4.2/28 [isp > hq]
+ip address [isp > hq]
 ex
 port ge0
 service-instance ge0/isp-hq
@@ -50,10 +50,10 @@ end
 write
 conf t
 interface srv-net
-ip address 192.168.1.1/26 [придумываем сами, кроме портов]
+ip address 192.168.1.1/27 [придумываем сами, кроме портов]
 ex
 interface cli-net
-ip address 192.168.2.1/28 [придумываем сами, кроме портов]
+ip address 192.168.2.1/26 [придумываем сами, кроме портов]
 ex
 interface management
 ip address 192.168.3.1/29 [придумываем сами, кроме портов]
