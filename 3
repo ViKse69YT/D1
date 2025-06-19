@@ -1,1 +1,22 @@
-nope
+HQ-RTR
+
+conf t
+ip pool A 192.168.2.4-192.168.2.10
+interface cli-net
+dhcp server 100
+ex
+dhcp-server 100
+static ip 192.168.2.3
+client-id mac [CLI]
+ex
+pool A 10
+mask [HQ-CLI]
+gateway 192.168.2.1
+domain-name au-team.irpo 
+dns 192.168.1.10
+end
+
+HQ-CLI
+acc 
+systemctl restart NetworkManager
+
